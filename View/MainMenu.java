@@ -93,13 +93,13 @@ public class MainMenu implements ActionListener {
 
         //Set up View Workouts screen
         viewWorkoutsPanel = new JPanel();
-        viewWorkoutsPanel.setBackground(Color.green);
+        viewWorkoutsPanel.setBackground(COLOR_BODY);
         bodyContainer.add(viewWorkoutsPanel, "viewWorkouts");
         viewWorkoutsPanel.setLayout(new BorderLayout(0, 0));
 
         // Set up details panel
         JPanel detailPanel = new JPanel();
-        detailPanel.setBackground(Color.red);
+        detailPanel.setBackground(COLOR_SECONDARY);
         detailPanel.setLayout(new GridLayout(6, 0, 0, 0));
 
         workoutIcon = new JLabel();
