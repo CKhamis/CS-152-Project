@@ -7,9 +7,9 @@ public class Playlist extends ArrayList<Workout> {
     private String name;
     private LocalDateTime created;
 
-    public Playlist(String name, LocalDateTime created) {
+    public Playlist(String name) {
         this.name = name;
-        this.created = created;
+        this.created = LocalDateTime.now();
     }
 
     public String getName() {

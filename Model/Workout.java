@@ -3,11 +3,11 @@ package Model;
 import java.io.File;
 
 public class Workout {
-    private File image;
+    private String image;
     private String title, description, tip, difficulty;
     private int duration, reps, sets;
 
-    public Workout(File image, String title, String description, String tip, String difficulty) {
+    public Workout(String image, String title, String description, String tip, String difficulty) {
         this.image = image;
         this.title = title;
         this.description = description;
@@ -17,7 +17,7 @@ public class Workout {
         this.reps = 0;
     }
 
-    public Workout(File image, String title, String description, String tip, String difficulty, int duration, int reps, int sets) {
+    public Workout(String image, String title, String description, String tip, String difficulty, int duration, int reps, int sets) {
         this.image = image;
         this.title = title;
         this.description = description;
@@ -25,14 +25,6 @@ public class Workout {
         this.difficulty = difficulty;
         this.duration = duration;
         this.reps = reps;
-        this.sets = sets;
-    }
-
-    public int getSets() {
-        return sets;
-    }
-
-    public void setSets(int sets) {
         this.sets = sets;
     }
 
@@ -52,12 +44,20 @@ public class Workout {
         this.reps = reps;
     }
 
-    public File getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(File image) {
+    public void setImage(String image) {
         this.image = image;
+    }
+
+    public int getSets() {
+        return sets;
+    }
+
+    public void setSets(int sets) {
+        this.sets = sets;
     }
 
     public String getTitle() {
