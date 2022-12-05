@@ -1,12 +1,13 @@
 package Controller;
 
 import Messages.Message;
+import Messages.ViewDetailsMessage;
 import Model.UserData;
 import Model.Workout;
 import View.MainMenu;
-import View.WorkoutViewer;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
@@ -19,12 +20,11 @@ public class Controller {
     public Controller(BlockingQueue<Message> queue, UserData user, ArrayList<Workout> workouts){
         this.queue = queue;
         this.workoutRepository = workouts;
-        Workout init = workouts.get(0);
-        view = new MainMenu(queue, user, init);
+        view = new MainMenu(queue, user, workouts);
         view.frame.setVisible(true);
 
-        //Valves
 
+        //Valves
         mainLoop();
     }
 

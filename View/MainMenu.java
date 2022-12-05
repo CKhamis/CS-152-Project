@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 
 public class MainMenu implements ActionListener {
@@ -23,14 +24,15 @@ public class MainMenu implements ActionListener {
     private JPanel bodyContainer, viewWorkoutsPanel, workoutListContainer, workoutList, viewPlaylistsPanel, newPlaylistsPanel;
 
     private Workout currentWorkout;
+    private ArrayList<Workout> workoutRepository;
     private JLabel workoutIcon, workoutTitle, workoutDescription, workoutDifficulty, workoutDuration, workoutTip;
 
-    public MainMenu(BlockingQueue<Message> queue, UserData userData, Workout workout){
+    public MainMenu(BlockingQueue<Message> queue, UserData userData, ArrayList<Workout> workouts){
         this.queue = queue;
         this.user = userData;
-        this.currentWorkout = workout;
+        this.workoutRepository = workouts;
         initialize();
-        updateWorkoutDetails(workout);
+        updateWorkoutDetails(workouts.get(0));
     }
     private void initialize() {
         frame = new JFrame();
@@ -153,7 +155,7 @@ public class MainMenu implements ActionListener {
         //Set up New Playlist screen
         newPlaylistsPanel = new JPanel();
         newPlaylistsPanel.setBackground(Color.orange);
-        bodyContainer.add(newPlaylistsPanel, "viewPlaylists");
+        bodyContainer.add(newPlaylistsPanel, "newPlaylist");
         newPlaylistsPanel.setLayout(new BorderLayout(0, 0));
 
 
@@ -162,14 +164,22 @@ public class MainMenu implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    private void updateWorkoutDetails(Workout workout){
+    public void updateWorkoutDetails(Workout workout){
         this.currentWorkout = workout;
+
         workoutTitle.setText(workout.getTitle());
         workoutDescription.setText(workout.getDescription());
         workoutDifficulty.setText(workout.getDifficulty());
         workoutDuration.setText(workout.getDuration() + "sec");
         workoutTip.setText(workout.getTip());
         updateIcon(workout.getImage());
+
+        workoutList.removeAll();
+
+        for(Workout m : workoutRepository) {
+            WorkoutListContainer n = new WorkoutListContainer(m, this);
+            workoutList.add(n);
+        }
     }
     public static ImageIcon resizeImage(String path, int w, int h) {
         ImageIcon imageIcon = new ImageIcon(path); // load the image to a imageIcon
@@ -207,6 +217,8 @@ public class MainMenu implements ActionListener {
             cl.show(bodyContainer, "viewPlaylists");
         } else if (e.getSource() == newPlaylist) {
             setCurrentTabSelection(newPlaylist);
+            CardLayout cl = (CardLayout)(bodyContainer.getLayout());
+            cl.show(bodyContainer, "newPlaylist");
         }
     }
 }
