@@ -2,7 +2,7 @@ package Model;
 
 import java.util.ArrayList;
 
-public class UserData {
+public class UserData extends ArrayList<Playlist>{
     private ArrayList<Playlist> workoutPlaylists;
 
     public UserData() {
@@ -11,16 +11,5 @@ public class UserData {
 
     public UserData(String name) {
         this.workoutPlaylists = new ArrayList<>();
-    }
-
-    public ArrayList<Playlist> getWorkoutPlaylists() {
-        return workoutPlaylists;
-    }
-
-    public void setWorkoutPlaylists(ArrayList<Playlist> workoutPlaylists) {
-        this.workoutPlaylists = workoutPlaylists;
-    }
-    public void addWorkoutPlaylist(Playlist p){
-        workoutPlaylists.add(p);
     }
 }

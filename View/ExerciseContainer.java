@@ -1,16 +1,9 @@
 package View;
-
-import Model.Exercise;
-import Model.Workout;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
-public class ExerciseContainer extends JPanel implements ActionListener {
+public class ExerciseContainer extends JPanel {
     private JComboBox<String> workoutPicker;
     private JTextField reps, sets;
 
@@ -19,7 +12,7 @@ public class ExerciseContainer extends JPanel implements ActionListener {
         this.setLayout(new GridLayout(1, 4));
 
         JLabel workoutNumber = new JLabel();
-        workoutNumber.setText("Exercise #" + index);
+        workoutNumber.setText("Exercise  #" + index);
         workoutNumber.setFont(new Font("San Serif", Font.BOLD, 20));
         this.add(workoutNumber);
 
@@ -73,10 +66,5 @@ public class ExerciseContainer extends JPanel implements ActionListener {
     }
     public int getWorkout(){
         return workoutPicker.getSelectedIndex();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
     }
 }

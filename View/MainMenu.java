@@ -25,14 +25,15 @@ public class MainMenu implements ActionListener {
     BlockingQueue<Message> queue;
     UserData user;
     private JToggleButton newPlaylist, viewWorkouts, viewPlaylists;
-    private JPanel bodyContainer, viewWorkoutsPanel, workoutListContainer, workoutList, viewPlaylistsPanel, newPlaylistsPanel, playlistWorkoutListContainer, playlistWorkoutList;
-    private JButton addWorkoutToPlaylist, savePlaylist;
+    private JPanel bodyContainer, viewWorkoutsPanel, workoutListContainer, workoutList, viewPlaylistsPanel, newPlaylistsPanel, playlistWorkoutListContainer, viewPlaylistContainer, playlistWorkoutList, viewWorkoutList;
+    private JButton addWorkoutToPlaylist, savePlaylist, loadPlaylist;
     private JTextField playlistName;
     private Workout currentWorkout;
     private ArrayList<Workout> workoutRepository;
     private JLabel workoutIcon, workoutTitle, workoutDescription, workoutDifficulty, workoutDuration, workoutTip;
-    private String[] workoutNameList;
+    private String[] workoutNameList, playlistNameList;
     private ArrayList<ExerciseContainer> listExercises;
+    private JComboBox<String> workoutPicker;
 
     public MainMenu(BlockingQueue<Message> queue, UserData userData, ArrayList<Workout> workouts){
         this.queue = queue;
@@ -159,6 +160,44 @@ public class MainMenu implements ActionListener {
         bodyContainer.add(viewPlaylistsPanel, "viewPlaylists");
         viewPlaylistsPanel.setLayout(new BorderLayout(0, 0));
 
+        //Set up nav
+        JPanel viewActionPane = new JPanel();
+        viewActionPane.setBackground(COLOR_SECONDARY);
+        viewActionPane.setLayout(new BorderLayout(0, 0));
+        viewPlaylistsPanel.add(viewActionPane, BorderLayout.NORTH);
+
+        //Set up right side of nav
+        JPanel viewPlaylistActionGroup = new JPanel();
+        viewPlaylistActionGroup.setBackground(COLOR_SECONDARY);
+        viewActionPane.add(viewPlaylistActionGroup, BorderLayout.EAST);
+
+        //Set up options
+        workoutPicker = new JComboBox<>();
+        updatePlaylistList();
+
+        loadPlaylist = new JButton();
+        loadPlaylist.setText("Load Playlist");
+        loadPlaylist.addActionListener(this);
+
+        viewPlaylistActionGroup.add(workoutPicker);
+        viewPlaylistActionGroup.add(loadPlaylist);
+
+        //Set up where workouts will populate
+        viewPlaylistContainer = new JPanel();
+        viewPlaylistContainer.setBackground(viewPlaylistsPanel.getBackground());
+        viewPlaylistsPanel.add(viewPlaylistContainer, BorderLayout.CENTER);
+        viewPlaylistContainer.setLayout(new GridLayout(0, 1, 0, 0));
+
+        viewWorkoutList = new JPanel();
+        viewWorkoutList.setBackground(viewPlaylistContainer.getBackground());
+        viewWorkoutList.setLayout(new GridLayout(0, 1, 10, 5));
+
+        JScrollPane viewPlaylistScrollPane = new JScrollPane(viewWorkoutList);
+        viewPlaylistScrollPane.setBackground(viewPlaylistContainer.getBackground());
+        viewPlaylistScrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        viewPlaylistScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        viewPlaylistScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        viewPlaylistContainer.add(viewPlaylistScrollPane);
 
         //Set up New Playlist screen
         newPlaylistsPanel = new JPanel();
@@ -227,6 +266,14 @@ public class MainMenu implements ActionListener {
         viewWorkouts.setSelected(true);
         frame.setBounds(100, 100, 1378, 788);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    private void updatePlaylistList() {
+        playlistNameList = new String[user.size()];
+        for(int i = 0; i < user.size(); i++){
+            playlistNameList[i] = user.get(i).getName();
+        }
+        workoutPicker.setModel(new DefaultComboBoxModel<>(playlistNameList));
     }
 
     public void updateWorkoutDetails(Workout workout){
@@ -298,7 +345,10 @@ public class MainMenu implements ActionListener {
             }
 
             //Save to user list
-            user.addWorkoutPlaylist(ret);
+            user.add(ret);
+
+            //Update list of playlists
+            updatePlaylistList();
 
             //Reset the playlist maker
             playlistName.setText(DEFAULT_TITLE);
@@ -306,6 +356,19 @@ public class MainMenu implements ActionListener {
             playlistWorkoutList.removeAll();
             playlistWorkoutList.revalidate();
             playlistWorkoutList.repaint();
+        }else if(e.getSource() == loadPlaylist){
+            //Remove old stuff
+            viewWorkoutList.removeAll();
+            //Get the playlist
+            Playlist playlist = user.get(workoutPicker.getSelectedIndex());
+
+            //Loop through playlist and display exercises
+            for(int i = 0; i < playlist.size(); i++){
+                ViewExerciseContainer item = new ViewExerciseContainer(playlist.get(i), i+1);
+                viewWorkoutList.add(item);
+            }
+            viewWorkoutList.revalidate();
+            viewWorkoutList.repaint();
         }
     }
 }
