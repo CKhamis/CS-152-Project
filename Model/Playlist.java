@@ -3,7 +3,7 @@ package Model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Playlist extends ArrayList<Workout> {
+public class Playlist extends ArrayList<Exercise> {
     private String name;
     private LocalDateTime created;
 
@@ -30,7 +30,7 @@ public class Playlist extends ArrayList<Workout> {
 
     public int getTotalDuration(){
         int sum = 0;
-        for(Workout w : this){
+        for(Exercise w : this){
             sum += w.getDuration() * w.getReps() * w.getSets();
         }
         return sum;
@@ -40,7 +40,7 @@ public class Playlist extends ArrayList<Workout> {
     }
     public int getTotalReps(){
         int sum = 0;
-        for(Workout w : this){
+        for(Exercise w : this){
             sum += w.getReps() * w.getSets();
         }
         return sum;

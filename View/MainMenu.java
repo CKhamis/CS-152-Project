@@ -1,11 +1,14 @@
 package View;
 
 import Messages.Message;
+import Model.Exercise;
+import Model.Playlist;
 import Model.UserData;
 import Model.Workout;
 import com.sun.tools.javac.Main;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,15 +20,19 @@ public class MainMenu implements ActionListener {
     private static final Color COLOR_HEADER = Color.WHITE;
     private static final Color COLOR_BODY = new Color(240, 240, 240);
     private static final String APPLICATION_NAME = "Workout Buddy";
+    private static final String DEFAULT_TITLE = "Cool Playlist";
     public JFrame frame;
     BlockingQueue<Message> queue;
     UserData user;
     private JToggleButton newPlaylist, viewWorkouts, viewPlaylists;
-    private JPanel bodyContainer, viewWorkoutsPanel, workoutListContainer, workoutList, viewPlaylistsPanel, newPlaylistsPanel;
-
+    private JPanel bodyContainer, viewWorkoutsPanel, workoutListContainer, workoutList, viewPlaylistsPanel, newPlaylistsPanel, playlistWorkoutListContainer, playlistWorkoutList;
+    private JButton addWorkoutToPlaylist, savePlaylist;
+    private JTextField playlistName;
     private Workout currentWorkout;
     private ArrayList<Workout> workoutRepository;
     private JLabel workoutIcon, workoutTitle, workoutDescription, workoutDifficulty, workoutDuration, workoutTip;
+    private String[] workoutNameList;
+    private ArrayList<ExerciseContainer> listExercises;
 
     public MainMenu(BlockingQueue<Message> queue, UserData userData, ArrayList<Workout> workouts){
         this.queue = queue;
@@ -152,12 +159,70 @@ public class MainMenu implements ActionListener {
         bodyContainer.add(viewPlaylistsPanel, "viewPlaylists");
         viewPlaylistsPanel.setLayout(new BorderLayout(0, 0));
 
+
         //Set up New Playlist screen
         newPlaylistsPanel = new JPanel();
-        newPlaylistsPanel.setBackground(Color.orange);
         bodyContainer.add(newPlaylistsPanel, "newPlaylist");
         newPlaylistsPanel.setLayout(new BorderLayout(0, 0));
 
+        //Set up action menu
+        JPanel playlistActionPane = new JPanel();
+        playlistActionPane.setBackground(COLOR_SECONDARY);
+        playlistActionPane.setLayout(new BorderLayout(0, 0));
+        newPlaylistsPanel.add(playlistActionPane, BorderLayout.NORTH);
+
+        //Set up right button container
+        JPanel newPlaylistActionGroup = new JPanel();
+        newPlaylistActionGroup.setBackground(COLOR_SECONDARY);
+        playlistActionPane.add(newPlaylistActionGroup, BorderLayout.EAST);
+
+        addWorkoutToPlaylist = new JButton("Add Workout");
+        savePlaylist = new JButton("Save as New Playlist");
+
+        addWorkoutToPlaylist.addActionListener(this);
+        savePlaylist.addActionListener(this);
+
+        newPlaylistActionGroup.add(addWorkoutToPlaylist);
+        newPlaylistActionGroup.add(savePlaylist);
+
+        //Set up left playlist container
+        JPanel newPlaylistNameGroup = new JPanel();
+        newPlaylistNameGroup.setBackground(COLOR_SECONDARY);
+        playlistActionPane.add(newPlaylistNameGroup, BorderLayout.WEST);
+
+        JLabel playlistTitle = new JLabel();
+        playlistTitle.setText("Playlist Name: ");
+        playlistTitle.setFont(new Font("Sans Serif", Font.BOLD, 20));
+        newPlaylistNameGroup.add(playlistTitle);
+
+        playlistName = new JTextField();
+        playlistName.setColumns(10);
+        playlistName.setText(DEFAULT_TITLE);
+        newPlaylistNameGroup.add(playlistName);
+
+        //Set up where workouts will populate
+        playlistWorkoutListContainer = new JPanel();
+        playlistWorkoutListContainer.setBackground(newPlaylistsPanel.getBackground());
+        newPlaylistsPanel.add(playlistWorkoutListContainer, BorderLayout.CENTER);
+        playlistWorkoutListContainer.setLayout(new GridLayout(0, 1, 0, 0));
+
+        playlistWorkoutList = new JPanel();
+        playlistWorkoutList.setBackground(playlistWorkoutListContainer.getBackground());
+        playlistWorkoutList.setLayout(new GridLayout(0, 1, 10, 5));
+
+        JScrollPane playlistWorkoutScrollPane = new JScrollPane(playlistWorkoutList);
+        playlistWorkoutScrollPane.setBackground(playlistWorkoutListContainer.getBackground());
+        playlistWorkoutScrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        playlistWorkoutScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        playlistWorkoutScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        playlistWorkoutListContainer.add(playlistWorkoutScrollPane);
+
+        //Set up options
+        workoutNameList = new String[workoutRepository.size()];
+        for(int i = 0; i < workoutRepository.size(); i++){
+            workoutNameList[i] = workoutRepository.get(i).getTitle();
+        }
+        listExercises = new ArrayList<>();
 
         viewWorkouts.setSelected(true);
         frame.setBounds(100, 100, 1378, 788);
@@ -219,6 +284,28 @@ public class MainMenu implements ActionListener {
             setCurrentTabSelection(newPlaylist);
             CardLayout cl = (CardLayout)(bodyContainer.getLayout());
             cl.show(bodyContainer, "newPlaylist");
+        } else if(e.getSource() == addWorkoutToPlaylist){
+            ExerciseContainer exerciseContainer = new ExerciseContainer(workoutNameList, listExercises.size()+1);
+            listExercises.add(exerciseContainer);
+            playlistWorkoutList.add(exerciseContainer);
+            playlistWorkoutList.revalidate();
+            playlistWorkoutList.repaint();
+        }else if(e.getSource() == savePlaylist){
+            // Generate list of exercises from the list of exercise containers
+            Playlist ret = new Playlist(playlistName.getText());
+            for(ExerciseContainer container : listExercises){
+                ret.add(new Exercise(workoutRepository.get(container.getWorkout()), container.getSets(), container.getReps()));
+            }
+
+            //Save to user list
+            user.addWorkoutPlaylist(ret);
+
+            //Reset the playlist maker
+            playlistName.setText(DEFAULT_TITLE);
+            listExercises.removeAll(listExercises);
+            playlistWorkoutList.removeAll();
+            playlistWorkoutList.revalidate();
+            playlistWorkoutList.repaint();
         }
     }
 }

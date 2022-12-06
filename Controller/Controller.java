@@ -23,7 +23,6 @@ public class Controller {
         view = new MainMenu(queue, user, workouts);
         view.frame.setVisible(true);
 
-
         //Valves
         mainLoop();
     }

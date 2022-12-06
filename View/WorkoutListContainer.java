@@ -55,7 +55,6 @@ public class WorkoutListContainer extends JPanel implements ActionListener {
         image.setIcon(icon);
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == viewDetailsButton){

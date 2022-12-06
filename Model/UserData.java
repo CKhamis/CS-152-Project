@@ -20,4 +20,7 @@ public class UserData {
     public void setWorkoutPlaylists(ArrayList<Playlist> workoutPlaylists) {
         this.workoutPlaylists = workoutPlaylists;
     }
+    public void addWorkoutPlaylist(Playlist p){
+        workoutPlaylists.add(p);
+    }
 }
