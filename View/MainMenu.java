@@ -352,7 +352,7 @@ public class MainMenu implements ActionListener {
             // Generate list of exercises from the list of exercise containers
             Playlist ret = new Playlist(playlistName.getText());
             for(ExerciseContainer container : listExercises){
-                ret.add(new Exercise(workoutRepository.get(container.getWorkout()), container.getSets(), container.getReps()));
+                ret.add(new Exercise(workoutRepository.get(container.getWorkout()), container.getReps(), container.getSets()));
             }
 
             //Save to user list
