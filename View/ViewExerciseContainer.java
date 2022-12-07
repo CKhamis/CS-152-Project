@@ -10,8 +10,9 @@ import java.awt.*;
 public class ViewExerciseContainer extends JPanel {
     private JLabel image;
     public ViewExerciseContainer(Exercise exercise, int index){
-        setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+        setBorder(new LineBorder(Color.white, 1, true));
         setLayout(new GridLayout(1, 5)); //image, Exercise num, Exercise name, #sets, #reps
+        setBackground(Color.darkGray);
 
         image = new JLabel();
         JLabel exerciseNum = new JLabel();
@@ -21,12 +22,16 @@ public class ViewExerciseContainer extends JPanel {
 
         exerciseNum.setText("Exercise #" + index);
         exerciseNum.setFont(new Font("San Serif", Font.BOLD, 20));
+        exerciseNum.setForeground(Color.white);
         exerciseName.setText(exercise.getTitle());
         exerciseName.setFont(new Font("San Serif", Font.BOLD, 20));
+        exerciseName.setForeground(Color.white);
         sets.setText("Sets: " + exercise.getSets());
         sets.setFont(new Font("San Serif", Font.BOLD, 20));
+        sets.setForeground(Color.white);
         reps.setText("Reps: " + exercise.getReps());
         reps.setFont(new Font("San Serif", Font.BOLD, 20));
+        reps.setForeground(Color.white);
         updateIcon(exercise.getImage());
 
         add(image);

@@ -21,10 +21,10 @@ public class Starter {
         workoutRepository.add(new Workout("images/Lunge.jpg", "Lunges", "Slowly and carefully walk forward, but with legs spread very far forward and backward", "Tip: DO not fall sideways", "Medium", 6));
         workoutRepository.add(new Workout("images/Pull Up.jpg", "Pull Ups", "Grab bar above you. With both arms, pull yourself up until your chin reaches above bar.", "Tip: Try starting out with assisted pull ups if too hard", "Hard", 3));
         workoutRepository.add(new Workout("images/Push Up.jpg", "Push Ups", "You better know how to do this smh", "Tip: Try your best to have smooth motion", "Hard", 2));
-        workoutRepository.add(new Workout("images/Shoulder Raise.jpg", "Shoulder Raises", "desc", "tip", "diff", 1));
-        workoutRepository.add(new Workout("images/Sit Up.jpg", "nnnnnnnn", "desc", "tip", "diff", 1));
-        workoutRepository.add(new Workout("images/Tricep Raise.jpg", "nnnnnnnn", "desc", "tip", "diff", 1));
-        workoutRepository.add(new Workout("images/Weighted Squat.jpg", "nnnnnnnn", "desc", "tip", "diff", 1));
+        workoutRepository.add(new Workout("images/Shoulder Raise.jpg", "Shoulder Raises", "With equally weighted dumbbells in both hands, raise them to the side of your head and then raise them upwards.", "Tip: Make sure to check if your shoulders are evenly placed", "Medium", 3));
+        workoutRepository.add(new Workout("images/Sit Up.jpg", "Sit Ups", "Sit down on the floor with feet in front of you. Bend your torso to your thighs.", "Tip: Do not use your hands to help", "Medium", 2));
+        workoutRepository.add(new Workout("images/Tricep Raise.jpg", "Tricep Extension", "With a dumbbell behind your head, carefully raise the dumbbell upwards", "Tip: Make sure your elbows are an even distance from your head", "Hard", 3));
+        workoutRepository.add(new Workout("images/Weighted Squat.jpg", "Weighted Squats", "With equal weighted dumbbells in both hands, do a squat.", "Tip: Make sure your knees do not go further forward than your toes.", "Hard", 4));
         new Controller(queue, user, workoutRepository);
     }
 }
